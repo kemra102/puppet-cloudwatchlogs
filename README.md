@@ -98,7 +98,7 @@ Contributions are welcome via pull requests.
 
 Authors:
 
-* [Danny Roberts[(https://github.com/kemra102)
+* [Danny Roberts](https://github.com/kemra102)
 * [Russ McKendrick](https://github.com/russmckendrick/)
 
 All other contributions: [https://github.com/kemra102/puppet-cloudwatchlogs/graphs/contributors](https://github.com/kemra102/puppet-cloudwatchlogs/graphs/contributors)
