@@ -1,0 +1,29 @@
+{
+  "name": "puppet-cloudwatchlogs",
+  "version": "0.1.0",
+  "author": "kemra102",
+  "summary": "Configure AWS Cloudwatch Logs on Amazon Linux instances.",
+  "license": "BSD-2-Clause",
+  "source": "https://github.com/kemra102/puppet-cloudwatchlogs",
+  "project_page": "https://github.com/kemra102/puppet-cloudwatchlogs",
+  "issues_url": "https://github.com/kemra102/puppet-cloudwatchlogs/issues",
+  "tags": ["aws", "cloudwatch", "cloud", "watch", "logs", "logging", "amazon"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem":"Amazon"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
