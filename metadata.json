@@ -1,5 +1,5 @@
 {
-  "name": "puppet-cloudwatchlogs",
+  "name": "kemra102-cloudwatchlogs",
   "version": "0.1.0",
   "author": "kemra102",
   "summary": "Configure AWS Cloudwatch Logs on Amazon Linux instances.",
