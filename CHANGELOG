@@ -1,2 +1,5 @@
 v0.1.0:
   - Initial release, supports Amazon Linux only.
+
+v1.0.0:
+  - Added support for Ubuntu, RHEL & CentOS via python package.
