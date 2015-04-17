@@ -87,50 +87,65 @@ class cloudwatchlogs (
       }
     }
     /^(Ubuntu|CentOS|RedHat)$/: {
-      # We need wget to fetch the installation script
       package { 'wget':
         ensure => 'present',
       }
-      # Grab the installation script
       exec { 'cloudwatchlogs-wget':
         path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
         command => 'wget -O /usr/local/src/awslogs-agent-setup.py https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py',
         unless  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
       }
-      # Create the /etc/awslogs directory manually
       file { '/etc/awslogs':
         ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
         mode   => '0755',
-        before => [
-          File['/etc/awslogs/awslogs.conf'],
-          File['/etc/awslogs/awscli.conf'],
+      }
+      file { '/var/awslogs':
+        ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+      file { '/var/awslogs/etc':
+        ensure  => 'directory',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        require => File['/var/awslogs'],
+        before  => [
+          File['/var/awslogs/etc/awslogs.conf'],
+          File['/var/awslogs/etc/awscli.conf'],
         ],
       }
-      # Populate the config files
       file { '/etc/awslogs/awslogs.conf':
-        ensure => 'file',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => template('cloudwatchlogs/awslogs.conf.erb'),
+        require => File['/etc/awslogs'],
+      }
+      file { '/var/awslogs/etc/awslogs.conf':
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
         content => template('cloudwatchlogs/awslogs.conf.erb'),
       }
-      file { '/etc/awslogs/awscli.conf':
-        ensure => 'file',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
+      file { '/var/awslogs/etc/awscli.conf':
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
         content => template('cloudwatchlogs/awscli.conf.erb'),
       }
-      # Install cloudwatchlogs
       exec { 'cloudwatchlogs-install':
         path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
         command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
         onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
-        unless  => '[ -f /var/awslogs/etc/awslogs.conf ]',
-        require => [
-          File['/etc/awslogs/awslogs.conf'],
-          File['/etc/awslogs/awscli.conf'],
-        ],
+        unless  => '[ -d /var/awslogs/bin ]',
+        require => File['/etc/awslogs/awslogs.conf'],
         before  => Service['awslogs'],
       }
       service { 'awslogs':
@@ -139,8 +154,8 @@ class cloudwatchlogs (
         hasrestart => true,
         hasstatus  => true,
         subscribe  => [
-          File['/etc/awslogs/awslogs.conf'],
-          File['/etc/awslogs/awscli.conf'],
+          File['/var/awslogs/etc/awslogs.conf'],
+          File['/var/awslogs/etc/awscli.conf'],
         ],
       }
     }
