@@ -48,9 +48,9 @@ In addition to the minimum config above you can also declare which logs will be 
 ```puppet
 class { 'cloudwatchlogs':
   logs                  => [
-    'Messages' => '/var/log/messages',
-    'Secure'   => '/var/log/secure',
-    'Mail'     => '/var/log/maillog',
+    { 'Messages' => '/var/log/messages' },
+    { 'Secure'   => '/var/log/secure' },
+    { 'Mail'     => '/var/log/maillog' },
   ],
   region                => 'eu-west-1',
   aws_access_key_id     => 'AKIAIOSFODNN7EXAMPLE',

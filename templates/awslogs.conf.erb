@@ -1,7 +1,8 @@
 [general]
 state_file = /var/lib/awslogs/agent-state
 
-<% @logs.each do |name,path| -%>
+<% @logs.each do |log| -%>
+<% log.sort.map do |name,path| -%>
 [<%= name %>]
 datetime_format = %b %d %H:%M:%S
 file = <%= path %>
@@ -9,4 +10,5 @@ buffer_duration = 5000
 log_stream_name = {instance_id}
 initial_position = start_of_file
 log_group_name = <%= name %>
+<% end -%>
 <% end -%>
