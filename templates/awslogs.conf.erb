@@ -1,5 +1,5 @@
 [general]
-state_file = /var/lib/awslogs/agent-state
+state_file = <%= @state_file %>
 
 <% @logs.each do |log| -%>
 <% log.sort.map do |name,path| -%>

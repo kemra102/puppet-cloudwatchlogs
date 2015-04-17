@@ -38,6 +38,7 @@
 #
 class cloudwatchlogs (
 
+  $state_file            = $::cloudwatchlogs::params::state_file,
   $logs                  = $::cloudwatchlogs::params::logs,
   $region                = $::cloudwatchlogs::params::region,
   $aws_access_key_id     = $::cloudwatchlogs::params::aws_access_key_id,
@@ -45,6 +46,7 @@ class cloudwatchlogs (
 
 ) inherits cloudwatchlogs::params {
 
+  validate_absolute_path($state_file)
   validate_array($logs)
   validate_string($region)
   validate_string($aws_access_key_id)
@@ -142,6 +144,7 @@ class cloudwatchlogs (
         ],
       }
     }
+    default: { fail("The ${module_name} module is not supported on ${::osfamily}/${::operatingsystem}.") }
   }
 
 }

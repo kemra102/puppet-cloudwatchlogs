@@ -1,6 +1,10 @@
 class cloudwatchlogs::params {
 
-  $logs = [
+  case $::operatingsystem {
+    'Amazon': { $state_file = '/var/lib/awslogs/agent-state' }
+    default: { $state_file = '/var/awslogs/state/agent-state' }
+  }
+  $logs       = [
     { name => 'Messages', path => '/var/log/messages', },
     { name => 'Secure', path => '/var/log/secure', },
   ]
