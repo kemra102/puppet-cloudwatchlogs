@@ -45,7 +45,7 @@ class cloudwatchlogs (
 
 ) inherits cloudwatchlogs::params {
 
-  validate_hash($logs)
+  validate_array($logs)
   validate_string($region)
   validate_string($aws_access_key_id)
   validate_string($aws_secret_access_key)
