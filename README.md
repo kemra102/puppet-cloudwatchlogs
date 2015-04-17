@@ -15,7 +15,7 @@
 
 ## Overview
 
-This module installs, configures and manages the service for the AWS Cloudwatch Logs Agent on Amazon Linux EC2 instances.
+This module installs, configures and manages the service for the AWS Cloudwatch Logs Agent on Amazon Linux, Ubuntu, Red Hat & CentOS EC2 instances.
 
 ## Module Description
 
@@ -60,11 +60,20 @@ class { 'cloudwatchlogs':
 
 ## Reference
 
+### `state_file`:
+
+Defaults:
+
+* Amazon Linux: `/var/lib/awslogs/agent-state`
+* Other: `/var/awslogs/state/agent-state`
+
+State file for the awslogs agent.
+
 ### `logs`:
 
 Default: `[ { 'Messages' => '/var/log/messages', }, { 'Secure' => '/var/log/secure', }, ]`
 
-A hash of arrays containg the 'name' & the 'path' of the log file(s) of the log file(s) to be sent to Cloudwatch Logs.
+An array of hashes containing the 'name' & the 'path' of the log file(s) to be sent to Cloudwatch Logs.
 
 ### `region`:
 
@@ -89,6 +98,11 @@ The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
 This module is currently only compatible with:
 
 * Amazon Linux AMI 2014.09 or later.
+* Ubuntu
+* Red Hat
+* CentOS
+
+More information on support as well as information in general about the set-up of the Cloudwatch Logs agent can be found [here](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/QuickStartEC2Instance.html).
 
 ## Development
 

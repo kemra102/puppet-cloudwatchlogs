@@ -6,6 +6,9 @@
 #
 # Here you should define a list of variables that this module would require.
 #
+# [*state_file*]
+#   State file for the awslogs agent.
+#
 # [*logs*]
 #   A hash of arrays containg the 'name' & the 'path' of the log file(s) of the
 #   log file(s) to be sent to Cloudwatch Logs.
