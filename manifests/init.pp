@@ -36,59 +36,52 @@
 #
 # Copyright 2015 Danny Roberts & Russ McKendrick
 #
-class cloudwatchlogs {
+class cloudwatchlogs (
 
-  # Set some default variables
-  $logs = [
-    { name => 'Messages', path => '/var/log/messages', },
-    { name => 'Secure', path => '/var/log/secure', },
-  ]
+  $logs                  = $::cloudwatchlogs::params::logs,
+  $region                = $::cloudwatchlogs::params::region,
+  $aws_access_key_id     = $::cloudwatchlogs::params::aws_access_key_id,
+  $aws_secret_access_key = $::cloudwatchlogs::params::aws_secret_access_key,
 
-  $region                = undef
-  $aws_access_key_id     = undef
-  $aws_secret_access_key = undef
+) inherits cloudwatchlogs::params {
 
-  # Validate variables using puppet/stdlib
   validate_hash($logs)
   validate_string($region)
   validate_string($aws_access_key_id)
   validate_string($aws_secret_access_key)
 
-  # Set some File type defaults
-  File {
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-  }
-
-  # Manage the cloudwatchlogs config files
-  file { '/etc/awslogs/awslogs.conf':
-    ensure  => 'file',
-    content => template('cloudwatchlogs/awslogs.conf.erb'),
-  }
-  file { '/etc/awslogs/awscli.conf':
-    ensure  => 'file',
-    content => template('cloudwatchlogs/awscli.conf.erb'),
-  }
-
-  # Start the clouwatchlogs service
-  service { 'awslogs':
-    ensure     => 'running',
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-  }
-
   case $::operatingsystem {
     'Amazon': {
-      # Set some File type defaults
-      File {
-        require => Package['awslogs'],
-        notify  => Service['awslogs'],
-      }
-      # Install the cloudwatchlogs package
       package { 'awslogs':
-        ensure => 'installed',
+        ensure => 'present',
+        before => [
+          File['/etc/awslogs/awslogs.conf'],
+          File['/etc/awslogs/awscli.conf'],
+        ],
+      }
+      file { '/etc/awslogs/awslogs.conf':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        content => template('cloudwatchlogs/awslogs.conf.erb'),
+      }
+      file { '/etc/awslogs/awscli.conf':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        content => template('cloudwatchlogs/awscli.conf.erb'),
+      }
+      service { 'awslogs':
+        ensure     => 'running',
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => true,
+        subscribe  => [
+          File['/etc/awslogs/awslogs.conf'],
+          File['/etc/awslogs/awscli.conf'],
+        ],
       }
     }
     /^(Ubuntu|CentOS|RedHat)$/: {
@@ -102,7 +95,6 @@ class cloudwatchlogs {
         command => 'wget -O /usr/local/src/awslogs-agent-setup.py https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py',
         unless  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
       }
-
       # Create the /etc/awslogs directory manually
       file { '/etc/awslogs':
         ensure => 'directory',
@@ -111,6 +103,21 @@ class cloudwatchlogs {
           File['/etc/awslogs/awslogs.conf'],
           File['/etc/awslogs/awscli.conf'],
         ],
+      }
+      # Populate the config files
+      file { '/etc/awslogs/awslogs.conf':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        content => template('cloudwatchlogs/awslogs.conf.erb'),
+      }
+      file { '/etc/awslogs/awscli.conf':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        content => template('cloudwatchlogs/awscli.conf.erb'),
       }
       # Install cloudwatchlogs
       exec { 'cloudwatchlogs-install':
@@ -123,6 +130,16 @@ class cloudwatchlogs {
           File['/etc/awslogs/awscli.conf'],
         ],
         before  => Service['awslogs'],
+      }
+      service { 'awslogs':
+        ensure     => 'running',
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => true,
+        subscribe  => [
+          File['/etc/awslogs/awslogs.conf'],
+          File['/etc/awslogs/awscli.conf'],
+        ],
       }
     }
   }
