@@ -12,5 +12,6 @@ class cloudwatchlogs::params {
   $region                = undef
   $aws_access_key_id     = undef
   $aws_secret_access_key = undef
+  $streamname            = '{instance-id}'
 
 }

@@ -16,6 +16,9 @@
 # [*region*]
 #   The region your EC2 instance is running in.
 #
+# [*streamname*]
+#   The name of the stream in CW Logs. Defaults to instance-id.
+#
 # [*aws_access_key_id*]
 #   The Access Key ID from the IAM user that has access to Cloudwatch Logs.
 #
@@ -46,6 +49,7 @@ class cloudwatchlogs (
   $region                = $::cloudwatchlogs::params::region,
   $aws_access_key_id     = $::cloudwatchlogs::params::aws_access_key_id,
   $aws_secret_access_key = $::cloudwatchlogs::params::aws_secret_access_key,
+  $streamname            = $::cloudwatchlogs::params::streamname,
 
 ) inherits cloudwatchlogs::params {
 
