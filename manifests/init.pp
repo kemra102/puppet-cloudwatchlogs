@@ -51,42 +51,50 @@ class cloudwatchlogs (
 
   validate_absolute_path($state_file)
   validate_array($logs)
-  validate_string($region)
-  validate_string($aws_access_key_id)
-  validate_string($aws_secret_access_key)
+  if $region {
+    validate_string($region)
+  }
+  if $aws_access_key_id {
+    validate_string($aws_access_key_id)
+  }
+  if $aws_secret_access_key {
+    validate_string($aws_secret_access_key)
+  }
 
   case $::operatingsystem {
     'Amazon': {
       package { 'awslogs':
         ensure => 'present',
-        before => [
-          File['/etc/awslogs/awslogs.conf'],
-          File['/etc/awslogs/awscli.conf'],
+        before => File['/etc/awslogs/awslogs.conf'],
         ],
       }
+
       file { '/etc/awslogs/awslogs.conf':
-        ensure => 'file',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
         content => template('cloudwatchlogs/awslogs.conf.erb'),
       }
-      file { '/etc/awslogs/awscli.conf':
-        ensure => 'file',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
-        content => template('cloudwatchlogs/awscli.conf.erb'),
+
+      if $region and $aws_access_key_id and $aws_secret_access_key {
+        file { '/etc/awslogs/awscli.conf':
+          ensure  => 'file',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          require => Package['awslogs'],
+          notify  => Service['awslogs'],
+          content => template('cloudwatchlogs/awscli.conf.erb'),
+        }
       }
+
       service { 'awslogs':
         ensure     => 'running',
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
-        subscribe  => [
-          File['/etc/awslogs/awslogs.conf'],
-          File['/etc/awslogs/awscli.conf'],
-        ],
+        subscribe  => File['/etc/awslogs/awslogs.conf'],
       }
     }
     /^(Ubuntu|CentOS|RedHat)$/: {
@@ -118,7 +126,6 @@ class cloudwatchlogs (
         require => File['/var/awslogs'],
         before  => [
           File['/var/awslogs/etc/awslogs.conf'],
-          File['/var/awslogs/etc/awscli.conf'],
         ],
       }
       file { '/etc/awslogs/awslogs.conf':
@@ -136,12 +143,16 @@ class cloudwatchlogs (
         mode    => '0644',
         content => template('cloudwatchlogs/awslogs.conf.erb'),
       }
-      file { '/var/awslogs/etc/awscli.conf':
-        ensure  => 'file',
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => template('cloudwatchlogs/awscli.conf.erb'),
+      if $region and $aws_access_key_id and $aws_secret_access_key {
+        file { '/var/awslogs/etc/awscli.conf':
+          ensure  => 'file',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          require => File['/var/awslogs/etc'],
+          notify  => Service['awslogs'],
+          content => template('cloudwatchlogs/awscli.conf.erb'),
+        }
       }
       exec { 'cloudwatchlogs-install':
         path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
@@ -156,10 +167,7 @@ class cloudwatchlogs (
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
-        subscribe  => [
-          File['/var/awslogs/etc/awslogs.conf'],
-          File['/var/awslogs/etc/awscli.conf'],
-        ],
+        subscribe  => File['/var/awslogs/etc/awslogs.conf'],
       }
     }
     default: { fail("The ${module_name} module is not supported on ${::osfamily}/${::operatingsystem}.") }
