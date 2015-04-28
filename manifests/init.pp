@@ -66,7 +66,6 @@ class cloudwatchlogs (
       package { 'awslogs':
         ensure => 'present',
         before => File['/etc/awslogs/awslogs.conf'],
-        ],
       }
 
       file { '/etc/awslogs/awslogs.conf':
