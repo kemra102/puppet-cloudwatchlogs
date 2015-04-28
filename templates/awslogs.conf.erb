@@ -2,7 +2,7 @@
 state_file = <%= @state_file %>
 
 <% @logs.each do |log| -%>
-<% log.sort.map do |name,path| -%>
+<% log.map do |name,path| -%>
 [<%= name %>]
 datetime_format = %b %d %H:%M:%S
 file = <%= path %>
