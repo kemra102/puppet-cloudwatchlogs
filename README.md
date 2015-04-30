@@ -31,14 +31,10 @@ CloudWatch Logs can be used to monitor your logs for specific phrases, values, o
 
 ### Beginning with cloudwatchlogs
 
-The minimum you need to get this module up and running is:
+The minimum you need to get this module up and running is (assuming your instance is launched with a suitable IAM role):
 
 ```puppet
-class { 'cloudwatchlogs':
-  region                => 'eu-west-1',
-  aws_access_key_id     => 'AKIAIOSFODNN7EXAMPLE',
-  aws_secret_access_key => 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
-}
+include '::cloudwatchlogs'
 ```
 
 ## Usage
@@ -68,6 +64,12 @@ Defaults:
 * Other: `/var/awslogs/state/agent-state`
 
 State file for the awslogs agent.
+
+### `streamname`:
+
+Default: `{instance-id}`
+
+The name of the stream in Cloudwatch Logs.
 
 ### `logs`:
 
