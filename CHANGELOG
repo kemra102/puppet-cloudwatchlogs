@@ -3,3 +3,7 @@ v0.1.0:
 
 v1.0.0:
   - Added support for Ubuntu, RHEL & CentOS via python package.
+
+v0.1.0:
+  - Made 'region', 'aws_access_key_id' & 'aws_secret_access_key' optional for people who launch instances with an IAM role.
+  - Added 'streamname' variable.

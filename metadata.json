@@ -1,6 +1,6 @@
 {
   "name": "kemra102-cloudwatchlogs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "kemra102",
   "summary": "Configure AWS Cloudwatch Logs on Amazon Linux instances.",
   "license": "BSD-2-Clause",
