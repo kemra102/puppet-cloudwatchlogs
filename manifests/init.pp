@@ -25,6 +25,9 @@
 # [*aws_secret_access_key*]
 #   The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
 #
+# [*streamname*]
+#   Specifies the destination log stream.
+#
 # === Examples
 #
 #  class { 'cloudwatchlogs':
@@ -64,6 +67,7 @@ class cloudwatchlogs (
   if $aws_secret_access_key {
     validate_string($aws_secret_access_key)
   }
+  validate_string($streamname)
 
   case $::operatingsystem {
     'Amazon': {

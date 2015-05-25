@@ -5,8 +5,8 @@ class cloudwatchlogs::params {
     default: { $state_file = '/var/awslogs/state/agent-state' }
   }
   $logs       = [
-    { name => 'Messages', path => '/var/log/messages', },
-    { name => 'Secure', path => '/var/log/secure', },
+    { 'Messages' => '/var/log/messages', },
+    { 'Secure'   => '/var/log/secure', },
   ]
 
   $region                = undef
