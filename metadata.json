@@ -2,7 +2,7 @@
   "name": "kemra102-cloudwatchlogs",
   "version": "1.1.1",
   "author": "kemra102",
-  "summary": "Configure AWS Cloudwatch Logs on Amazon Linux instances.",
+  "summary": "Configure AWS Cloudwatch Logs on Amazon Linux, Ubuntu, Red Hat & CentOS EC2 instances.",
   "license": "BSD-2-Clause",
   "source": "https://github.com/kemra102/puppet-cloudwatchlogs",
   "project_page": "https://github.com/kemra102/puppet-cloudwatchlogs",
