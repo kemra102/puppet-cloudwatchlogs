@@ -83,6 +83,8 @@ Default: `undef`
 
 The region your EC2 instance is running in.
 
+**NOTE:** This is required for none *Amazon* distros.
+
 ### `aws_access_key_id`:
 
 Default: `undef`

@@ -163,13 +163,17 @@ class cloudwatchlogs (
           content => template('cloudwatchlogs/awscli.conf.erb'),
         }
       }
-      exec { 'cloudwatchlogs-install':
-        path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
-        command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
-        onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
-        unless  => '[ -d /var/awslogs/bin ]',
-        require => File['/etc/awslogs/awslogs.conf'],
-        before  => Service['awslogs'],
+      if ($region == undef) {
+        fail("${region} must be defined on ${::operatingsystem}")
+      } else {
+        exec { 'cloudwatchlogs-install':
+          path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
+          command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
+          onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
+          unless  => '[ -d /var/awslogs/bin ]',
+          require => File['/etc/awslogs/awslogs.conf'],
+          before  => Service['awslogs'],
+        }
       }
       service { 'awslogs':
         ensure     => 'running',
