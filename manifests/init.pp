@@ -109,7 +109,7 @@ class cloudwatchlogs (
         package { 'wget':
           ensure => 'present',
         }
-      }  
+      }
       exec { 'cloudwatchlogs-wget':
         path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
         command => 'wget -O /usr/local/src/awslogs-agent-setup.py https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py',
