@@ -1,4 +1,4 @@
-# cloudwatchlogs
+# cloudwatchlogs [![Build Status](https://travis-ci.org/kemra102/puppet-cloudwatchlogs.svg)](https://travis-ci.org/kemra102/puppet-cloudwatchlogs)
 
 #### Table of Contents
 
@@ -67,7 +67,7 @@ State file for the awslogs agent.
 
 ### `streamname`:
 
-Default: `{instance-id}`
+Default: `{instance_id}`
 
 The name of the stream in Cloudwatch Logs.
 
