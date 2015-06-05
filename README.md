@@ -97,6 +97,29 @@ Default: `undef`
 
 The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
 
+## Http Proxy Usage
+
+If you have an http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
+
+```puppet
+  $launcher = "#!/bin/sh
+# Version: 1.3.5
+echo -n $$ > /var/awslogs/state/awslogs.pid
+/usr/bin/env -i AWS_CONFIG_FILE=/var/awslogs/etc/awscli.conf HOME=\$HOME HTTPS_PROXY=${http_proxy} HTTP_PROXY=${http_proxy} NO_PROXY=169.254.169.254  /bin/nice -n 4 /var/awslogs/bin/aws logs push --config-file /var/awslogs/etc/awslogs.conf >> /var/log/awslogs.log 2>&1
+"
+
+  file { '/var/awslogs/bin/awslogs-agent-launcher.sh':
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    content => $launcher,
+    require => Class['cloudwatchlogs'],
+  }
+```
+
+NOTE: On Amazon Linux the AWS_CONFIG_FILE is /etc/awslogs/awscli.conf or if you are using AWS profile (which you should) then the AWS_CONFIG_FILE is not required. 
+
 ## Limitations
 
 This module is currently only compatible with:
