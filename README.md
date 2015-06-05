@@ -77,6 +77,24 @@ Default: `[ { 'Messages' => '/var/log/messages', }, { 'Secure' => '/var/log/secu
 
 An array of hashes containing the 'name' & the 'path' of the log file(s) to be sent to Cloudwatch Logs.
 
+### `datetime_formats`:
+
+Default: `[]`    and datetime_format defaults to %b %d %H:%M:%S for all logs
+
+An array of hashes containing the 'name' & the 'datetime format' of the log file(s) to be sent to Cloudwatch Logs.
+
+Example for mongodb logs: 
+
+```puppet
+logs                  => [
+ { 'system_messages'  => '/var/log/messages' },
+ { 'mongod_logs'      => '/var/log/mongodb/mongod.log' },
+ ],
+ datetime_formats => [
+   { 'mongod.log' => '%a %b %d %H:%M:%S.%f' },
+ ],    
+```
+
 ### `region`:
 
 Default: `undef`
