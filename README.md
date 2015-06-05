@@ -97,7 +97,7 @@ The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
 
 ## Http_proxy Usage
 
-If you have an http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to module the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
+If you have an http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
 
 ```puppet
   $launcher = "#!/bin/sh
@@ -116,7 +116,7 @@ echo -n $$ > /var/awslogs/state/awslogs.pid
   }
 ```
 
-NOTE: On Amazon LInux the AWS_CONFIG_FILE is /etc/awslogs/awscli.conf or if you are using AWS profile (which you should) then the AWS_CONFIG_FILE is not required. 
+NOTE: On Amazon Linux the AWS_CONFIG_FILE is /etc/awslogs/awscli.conf or if you are using AWS profile (which you should) then the AWS_CONFIG_FILE is not required. 
 
 ## Limitations
 
