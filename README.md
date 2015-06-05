@@ -95,7 +95,7 @@ Default: `undef`
 
 The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
 
-## Http_proxy Usage
+## Http Proxy Usage
 
 If you have an http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
 
