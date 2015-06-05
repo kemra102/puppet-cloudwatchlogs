@@ -13,6 +13,10 @@
 #   A hash of arrays containg the 'name' & the 'path' of the log file(s) of the
 #   log file(s) to be sent to Cloudwatch Logs.
 #
+# [*datetime_formats*]
+#   A hash of arrays containg the 'name' & the 'datetime_format' of the log file(s) of the
+#   log file(s) to be sent to Cloudwatch Logs.
+#
 # [*region*]
 #   The region your EC2 instance is running in.
 #
@@ -28,9 +32,7 @@
 # [*streamname*]
 #   Specifies the destination log stream.
 #
-# [*datetime_format*]
-#   Specifies the log datetime format.
-#
+
 # === Examples
 #
 #  class { 'cloudwatchlogs':
@@ -57,7 +59,6 @@ class cloudwatchlogs (
   $aws_access_key_id     = $::cloudwatchlogs::params::aws_access_key_id,
   $aws_secret_access_key = $::cloudwatchlogs::params::aws_secret_access_key,
   $streamname            = $::cloudwatchlogs::params::streamname,
-  $datetime_format       = '%b %d %H:%M:%S',
 
 ) inherits cloudwatchlogs::params {
 
