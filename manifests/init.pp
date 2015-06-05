@@ -52,6 +52,7 @@ class cloudwatchlogs (
 
   $state_file            = $::cloudwatchlogs::params::state_file,
   $logs                  = $::cloudwatchlogs::params::logs,
+  $datetime_formats      = $::cloudwatchlogs::params::datetime_formats,
   $region                = $::cloudwatchlogs::params::region,
   $aws_access_key_id     = $::cloudwatchlogs::params::aws_access_key_id,
   $aws_secret_access_key = $::cloudwatchlogs::params::aws_secret_access_key,
