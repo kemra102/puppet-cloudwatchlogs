@@ -8,7 +8,12 @@ class cloudwatchlogs::params {
     { 'Messages' => '/var/log/messages', },
     { 'Secure'   => '/var/log/secure', },
   ]
-
+  
+  $datetime_formats       = [
+    { 'Messages' => '%b %d %H:%M:%S', },
+    { 'Secure'   => '%b %d %H:%M:%S', },
+  ]
+  
   $region                = undef
   $aws_access_key_id     = undef
   $aws_secret_access_key = undef
