@@ -11,7 +11,7 @@ state_file = <%= @state_file %>
 datetime_format = <%= logformat[name] %>
 <%- end -%>
 <%- end -%>
-<%- if logdatekey = false -%>
+<%- if !logdatekey -%>
 datetime_format = %b %d %H:%M:%S
 <%- end -%>
 file = <%= path %>
