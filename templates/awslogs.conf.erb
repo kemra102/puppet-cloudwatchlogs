@@ -4,10 +4,15 @@ state_file = <%= @state_file %>
 <% @logs.each do |log| -%>
 <% log.each do |name,path| -%>
 [<%= name %>]
+<%- logdatekey = false -%>
 <%- @datetime_formats.each do |logformat| -%>
 <%- if logformat.has_key?(name) -%>
+<%- logdatekey = true -%>
 datetime_format = <%= logformat[name] %>
 <%- end -%>
+<%- end -%>
+<%- if logdatekey = false -%>
+datetime_format = %b %d %H:%M:%S
 <%- end -%>
 file = <%= path %>
 buffer_duration = 5000
