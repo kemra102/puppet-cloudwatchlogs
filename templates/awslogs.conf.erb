@@ -4,7 +4,11 @@ state_file = <%= @state_file %>
 <% @logs.each do |log| -%>
 <% log.each do |name,path| -%>
 [<%= name %>]
-datetime_format = <%= @datetime_format %>
+<% @datetime_formats.each do |logname,logdateformat| -%>
+<% if logname = name%>
+datetime_format = <%= logdateformat %>
+<% end -%>
+<% end -%>
 file = <%= path %>
 buffer_duration = 5000
 log_stream_name = <%= @streamname %>
