@@ -29,6 +29,12 @@ CloudWatch Logs can be used to monitor your logs for specific phrases, values, o
 * Configuration files under `/etc/awslogs`.
 * The `awslogs` service.
 
+### Setup Requirements
+
+This module does *NOT* manage the AWS CLI credentials. As such if you are not using an IAM role (recommended) then you will need some other way of managing the credentials.
+
+[This module](https://forge.puppetlabs.com/jdowning/awscli) by [Justin Downing](https://github.com/justindowning) is recommended for this purpose.
+
 ### Beginning with cloudwatchlogs
 
 The minimum you need to get this module up and running is (assuming your instance is launched with a suitable IAM role):
@@ -39,24 +45,39 @@ include '::cloudwatchlogs'
 
 ## Usage
 
-In addition to the minimum config above you can also declare which logs will be shipped to Cloudwatch Logs:
+The above minimal config can also be presented as:
 
 ```puppet
-class { 'cloudwatchlogs':
-  logs                  => [
-    { 'Messages' => '/var/log/messages' },
-    { 'Secure'   => '/var/log/secure' },
-    { 'Mail'     => '/var/log/maillog' },
-  ],
-  region                => 'eu-west-1',
-  aws_access_key_id     => 'AKIAIOSFODNN7EXAMPLE',
-  aws_secret_access_key => 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+class { '::cloudwatchlogs': }
+```
+
+On none *Amazon Linux* instances you also need to provide a default region:
+
+```puppet
+class { '::cloudwatchlogs': region => 'eu-west-1' }
+```
+For each log you want sent to Cloudwatch Logs you create a `cloudwatchlogs::log` resource.
+
+A simple example that might be used on the RedHat *::osfamily* is:
+
+```puppet
+class { '::cloudwatchlogs': region => 'eu-west-1' }
+
+cloudwatchlogs::log { 'Messages':
+  path => '/var/log/messages',
+}
+cloudwatchlogs::log { 'Secure':
+  path => '/var/log/secure',
 }
 ```
 
+See the *examples/* directory for further examples.
+
 ## Reference
 
-### `state_file`:
+### `cloudwatchlogs`
+
+#### `state_file`:
 
 Defaults:
 
@@ -65,19 +86,7 @@ Defaults:
 
 State file for the awslogs agent.
 
-### `streamname`:
-
-Default: `{instance_id}`
-
-The name of the stream in Cloudwatch Logs.
-
-### `logs`:
-
-Default: `[ { 'Messages' => '/var/log/messages', }, { 'Secure' => '/var/log/secure', }, ]`
-
-An array of hashes containing the 'name' & the 'path' of the log file(s) to be sent to Cloudwatch Logs.
-
-### `region`:
+#### `region`:
 
 Default: `undef`
 
@@ -85,40 +94,46 @@ The region your EC2 instance is running in.
 
 **NOTE:** This is required for none *Amazon* distros.
 
-### `aws_access_key_id`:
+### `cloudwatchlogs::log`
+
+#### `path`
 
 Default: `undef`
 
-The Access Key ID from the IAM user that has access to Cloudwatch Logs.
+Optional. This is the absolute path to the log file being managed. If not set the name of the resource is used instead (and must be an absolute path if that this situation occurs).
 
-### `aws_secret_access_key`:
+#### `streamname`
 
-Default: `undef`
+Default: `{instance_id}`
 
-The Secret Access Key from the IAM user that has access to Cloudwatch Logs.
+The name of the stream in Cloudwatch Logs.
+
+#### `datetime_format`
+
+Default: `%b %d %H:%M:%S`
+
+Specifies how the timestamp is extracted from logs. See [the official docs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AgentReference.html) for further info.
 
 ## Http Proxy Usage
 
-If you have an http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
+If you have a http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
 
 ```puppet
-  $launcher = "#!/bin/sh
+$launcher = "#!/bin/sh
 # Version: 1.3.5
 echo -n $$ > /var/awslogs/state/awslogs.pid
 /usr/bin/env -i AWS_CONFIG_FILE=/var/awslogs/etc/awscli.conf HOME=\$HOME HTTPS_PROXY=${http_proxy} HTTP_PROXY=${http_proxy} NO_PROXY=169.254.169.254  /bin/nice -n 4 /var/awslogs/bin/aws logs push --config-file /var/awslogs/etc/awslogs.conf >> /var/log/awslogs.log 2>&1
 "
 
-  file { '/var/awslogs/bin/awslogs-agent-launcher.sh':
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    content => $launcher,
-    require => Class['cloudwatchlogs'],
-  }
+file { '/var/awslogs/bin/awslogs-agent-launcher.sh':
+  ensure  => file,
+  owner   => root,
+  group   => root,
+  mode    => '0755',
+  content => $launcher,
+  require => Class['cloudwatchlogs'],
+}
 ```
-
-NOTE: On Amazon Linux the AWS_CONFIG_FILE is /etc/awslogs/awscli.conf or if you are using AWS profile (which you should) then the AWS_CONFIG_FILE is not required. 
 
 ## Limitations
 

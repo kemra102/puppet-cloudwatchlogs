@@ -12,11 +12,9 @@
 #
 # === Examples
 #
-#  class { 'cloudwatchlogs':
-#    region                => 'eu-west-1',
-#    aws_access_key_id     => 'AKIAIOSFODNN7EXAMPLE',
-#    aws_secret_access_key => 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
-#  }
+#  include '::cloudwatchlogs'
+#
+#  class { '::cloudwatchlogs': region => 'eu-west-1' }
 #
 # === Authors
 #
