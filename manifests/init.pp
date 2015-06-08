@@ -103,7 +103,7 @@ class cloudwatchlogs (
       }
 
       if ($region == undef) {
-        fail("${region} must be defined on ${::operatingsystem}")
+        fail("region must be defined on ${::operatingsystem}")
       } else {
         exec { 'cloudwatchlogs-install':
           path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
