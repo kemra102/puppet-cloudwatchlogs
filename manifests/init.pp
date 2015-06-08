@@ -109,8 +109,9 @@ class cloudwatchlogs (
         ensure => 'directory',
       }
       file { '/var/awslogs/etc/awslogs.conf':
-        ensure => 'link',
-        target => '/etc/awslogs/awslogs.conf',
+        ensure  => 'link',
+        target  => '/etc/awslogs/awslogs.conf',
+        require => Exec['cloudwatchlogs-install'],
       }
 
       if ($region == undef) {
