@@ -97,9 +97,20 @@ class cloudwatchlogs (
         require        => File['/etc/awslogs'],
       }
       concat::fragment { 'awslogs-header':
+        target  => '/etc/awslogs/awslogs.conf',
+        content => template('cloudwatchlogs/awslogs_header.erb'),
+        order   => '00',
+      }
+
+      file { '/var/awslogs':
+        ensure => 'directory',
+      }
+      file { '/var/awslogs/etc':
+        ensure => 'directory',
+      }
+      file { '/var/awslogs/etc/awslogs.conf':
+        ensure => 'link',
         target => '/etc/awslogs/awslogs.conf',
-        source => template('cloudwatchlogs/awslogs_header.erb'),
-        order  => '00'
       }
 
       if ($region == undef) {
@@ -110,7 +121,7 @@ class cloudwatchlogs (
           command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
           onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
           unless  => '[ -d /var/awslogs/bin ]',
-          require => File['/etc/awslogs/awslogs.conf'],
+          require => Concat['/etc/awslogs/awslogs.conf'],
           before  => Service['awslogs'],
         }
       }
