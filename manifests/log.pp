@@ -15,8 +15,8 @@ define cloudwatchlogs::log (
   validate_string($datetime_format)
 
   concat::fragment { "cloudwatchlogs_fragment_${name}":
-    target => '/etc/awslogs/awslogs.conf',
-    source => template('cloudwatchlogs/awslogs_log.erb'),
+    target  => '/etc/awslogs/awslogs.conf',
+    content => template('cloudwatchlogs/awslogs_log.erb'),
   }
 
 }

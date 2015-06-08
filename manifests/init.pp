@@ -38,8 +38,6 @@ class cloudwatchlogs (
     validate_string($region)
   }
 
-  require '::awscli'
-
   case $::operatingsystem {
     'Amazon': {
       package { 'awslogs':
@@ -53,12 +51,12 @@ class cloudwatchlogs (
         mode           => '0644',
         ensure_newline => true,
         warn           => true,
-        require        => Packe['awslogs'],
+        require        => Package['awslogs'],
       }
-      concat::fragment { 'awslogs-header'
-        target => '/etc/awslogs/awslogs.conf',
-        source => template('cloudwatchlogs/awslogs_header.erb'),
-        order  => '00'
+      concat::fragment { 'awslogs-header':
+        target  => '/etc/awslogs/awslogs.conf',
+        content => template('cloudwatchlogs/awslogs_header.erb'),
+        order   => '00',
       }
 
       service { 'awslogs':
@@ -98,7 +96,7 @@ class cloudwatchlogs (
         warn           => true,
         require        => File['/etc/awslogs'],
       }
-      concat::fragment { 'awslogs-header'
+      concat::fragment { 'awslogs-header':
         target => '/etc/awslogs/awslogs.conf',
         source => template('cloudwatchlogs/awslogs_header.erb'),
         order  => '00'
