@@ -6,6 +6,6 @@ cloudwatchlogs::log { 'Messages':
   streamname => 'web-servers',
 }
 cloudwatchlogs::log { 'Secure':
-  path 	     => '/var/log/secure',
+  path       => '/var/log/secure',
   streamname => 'web-servers',
 }
