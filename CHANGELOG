@@ -11,3 +11,9 @@ v0.1.0:
 v1.1.2:
   - Fixed default stream name.
   - Only install 'wget' package if not defined else where in catalogue.
+
+v2.0.0:
+  - Moved to using concat for each log file entry. This allows use of more customizable entries more easily down the road.
+  - Removed management of AWS CLI keys, this should be done by mdoules designed for this purpose.
+  - Documented usage of using a http_proxy on instances that might require it.
+  - Provided examples of IAM role for Cloudwatch Logs & of various ways to specify log entries.
