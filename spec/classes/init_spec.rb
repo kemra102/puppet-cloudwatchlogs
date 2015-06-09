@@ -8,14 +8,13 @@ describe 'cloudwatchlogs', :type => :class do
       should create_class('cloudwatchlogs')
       should contain_package('awslogs').with_ensure('present')
       should contain_concat('/etc/awslogs/awslogs.conf').with({
-        'ensure'         => 'file',
+        'ensure'         => 'present',
         'owner'          => 'root',
         'group'          => 'root',
         'mode'           => '0644',
         'ensure_newline' => 'true',
         'warn'           => 'true',
       })
-      should contain_concat('/etc/awslogs/awslogs.conf').with_content(/state_file = \/var\/lib\/awslogs\/agent-stat/)
       should contain_service('awslogs').with({
         'ensure'     => 'running',
         'enable'     => 'true',
@@ -45,14 +44,13 @@ describe 'cloudwatchlogs', :type => :class do
         'mode'   => '0755',
       })
       should contain_concat('/etc/awslogs/awslogs.conf').with({
-        'ensure'         => 'file',
+        'ensure'         => 'present',
         'owner'          => 'root',
         'group'          => 'root',
         'mode'           => '0644',
         'ensure_newline' => 'true',
         'warn'           => 'true',
       })
-      should contain_concat('/etc/awslogs/awslogs.conf').with_content(/state_file = \/var\/awslogs\/state\/agent-stat/)
       should contain_file('/var/awslogs').with_ensure('directory')
       should contain_file('/var/awslogs/etc').with_ensure('directory')
       should contain_file('/var/awslogs/etc/awslogs.conf').with({
