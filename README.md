@@ -114,6 +114,12 @@ Default: `%b %d %H:%M:%S`
 
 Specifies how the timestamp is extracted from logs. See [the official docs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AgentReference.html) for further info.
 
+#### `log_group_name`
+
+Default: *Resource Name*
+
+Specifies the destination log group. A log group will be created automatically if it doesn't already exist.
+
 ## Http Proxy Usage
 
 If you have a http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
