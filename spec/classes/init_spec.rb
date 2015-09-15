@@ -3,6 +3,7 @@ describe 'cloudwatchlogs', :type => :class do
   context 'default parameters on Amazon Linux' do
     let (:facts) {{
       :operatingsystem => 'Amazon',
+      :concat_basedir  => '/var/lib/puppet/concat',
     }}
     it {
       should create_class('cloudwatchlogs')
@@ -29,6 +30,7 @@ describe 'cloudwatchlogs', :type => :class do
     }}
     let (:facts) {{
       :operatingsystem => 'Ubuntu',
+      :concat_basedir  => '/var/lib/puppet/concat',
     }}
     it {
       should contain_package('wget').with_ensure('present')
