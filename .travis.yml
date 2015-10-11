@@ -14,5 +14,3 @@ matrix:
 branches:
   only:
     - master
-notifications:
-  email: danny@thefallenphoenix.net
