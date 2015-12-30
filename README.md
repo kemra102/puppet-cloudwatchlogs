@@ -120,6 +120,12 @@ Default: *Resource Name*
 
 Specifies the destination log group. A log group will be created automatically if it doesn't already exist.
 
+#### `multi_line_start_pattern`
+
+Default: `undef`
+
+Optional. This is a regex string that identifies the start of a log line. See [the official docs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AgentReference.html) for further info.
+
 ## Http Proxy Usage
 
 If you have a http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
