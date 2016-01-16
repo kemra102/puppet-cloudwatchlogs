@@ -28,13 +28,16 @@
 class cloudwatchlogs (
   $state_file = $::cloudwatchlogs::params::state_file,
   $region     = $::cloudwatchlogs::params::region,
-
+  $logs       = {}
 ) inherits cloudwatchlogs::params {
 
   validate_absolute_path($state_file)
   if $region {
     validate_string($region)
   }
+
+  validate_hash($logs)
+  create_resources('cloudwatchlogs::log', $logs)
 
   case $::operatingsystem {
     'Amazon': {
