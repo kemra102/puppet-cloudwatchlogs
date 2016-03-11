@@ -76,6 +76,7 @@ class cloudwatchlogs (
         path    => '/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin',
         command => 'wget -O /usr/local/src/awslogs-agent-setup.py https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py',
         unless  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
+        require => Package['wget'],
       }
 
       file { '/etc/awslogs':
@@ -83,8 +84,7 @@ class cloudwatchlogs (
         owner  => 'root',
         group  => 'root',
         mode   => '0755',
-      }
-
+      } ->
       concat { '/etc/awslogs/awslogs.conf':
         ensure         => 'present',
         owner          => 'root',
@@ -92,8 +92,8 @@ class cloudwatchlogs (
         mode           => '0644',
         ensure_newline => true,
         warn           => true,
-        require        => File['/etc/awslogs'],
       }
+
       concat::fragment { 'awslogs-header':
         target  => '/etc/awslogs/awslogs.conf',
         content => template('cloudwatchlogs/awslogs_header.erb'),
@@ -102,14 +102,13 @@ class cloudwatchlogs (
 
       file { '/var/awslogs':
         ensure => 'directory',
-      }
+      } ->
       file { '/var/awslogs/etc':
         ensure => 'directory',
-      }
+      } ->
       file { '/var/awslogs/etc/awslogs.conf':
-        ensure  => 'link',
-        target  => '/etc/awslogs/awslogs.conf',
-        require => Exec['cloudwatchlogs-install'],
+        ensure => 'link',
+        target => '/etc/awslogs/awslogs.conf',
       }
 
       if ($region == undef) {
@@ -120,8 +119,11 @@ class cloudwatchlogs (
           command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
           onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
           unless  => '[ -d /var/awslogs/bin ]',
-          require => Concat['/etc/awslogs/awslogs.conf'],
-          before  => Service['awslogs'],
+          require => Exec['cloudwatchlogs-wget'],
+          before  => [
+            Service['awslogs'],
+            File['/var/awslogs/etc/awslogs.conf'],
+          ]
         }
       }
 
@@ -131,6 +133,7 @@ class cloudwatchlogs (
         hasrestart => true,
         hasstatus  => true,
         subscribe  => Concat['/etc/awslogs/awslogs.conf'],
+        require    => File['/var/awslogs/etc/awslogs.conf'],
       }
     }
     default: { fail("The ${module_name} module is not supported on ${::osfamily}/${::operatingsystem}.") }
