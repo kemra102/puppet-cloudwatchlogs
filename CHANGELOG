@@ -21,3 +21,7 @@ v2.0.0:
 v2.1.0:
   - You can now specify the log_group_name explicitly, otherwise it defaults to the resource name as per the previous behaviour.
 
+v2.2.0:
+  - Now supports 'multi_line_start_pattern' for each log.
+  - Logs can now be defined as a hash as part of the main class.
+  - Ensure 'wget' is installed.

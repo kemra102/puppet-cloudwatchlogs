@@ -71,6 +71,22 @@ cloudwatchlogs::log { 'Secure':
 }
 ```
 
+Alternatively logs can be defined as part of the main `cloudwatchlogs` class:
+
+```puppet
+class { '::cloudwatchlogs':
+  region => 'eu-west-1',
+  logs   => {
+    'Messages' => {
+      path => '/var/log/messages'
+    },
+    'Secure'   => {
+      path => '/var/log/secure'
+    }
+  }
+}
+```
+
 See the *examples/* directory for further examples.
 
 ## Reference
