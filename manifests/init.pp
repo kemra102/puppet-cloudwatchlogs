@@ -122,7 +122,10 @@ class cloudwatchlogs (
           command => "python /usr/local/src/awslogs-agent-setup.py -n -r ${region} -c /etc/awslogs/awslogs.conf",
           onlyif  => '[ -e /usr/local/src/awslogs-agent-setup.py ]',
           unless  => '[ -d /var/awslogs/bin ]',
-          require => Exec['cloudwatchlogs-wget'],
+          require => [
+            Concat['/etc/awslogs/awslogs.conf'],
+            Exec['cloudwatchlogs-wget']
+          ],
           before  => [
             Service['awslogs'],
             File['/var/awslogs/etc/awslogs.conf'],
