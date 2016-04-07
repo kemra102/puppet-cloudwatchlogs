@@ -28,8 +28,9 @@
 class cloudwatchlogs (
   $state_file = $::cloudwatchlogs::params::state_file,
   $region     = $::cloudwatchlogs::params::region,
-  $logs       = hiera_hash('cloudwatchlogs::logs',{}),
 ) inherits cloudwatchlogs::params {
+
+  $logs       = hiera_hash('cloudwatchlogs::logs',{}),
 
   validate_absolute_path($state_file)
   if $region {
