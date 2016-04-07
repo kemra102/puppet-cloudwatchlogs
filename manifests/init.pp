@@ -60,6 +60,14 @@ class cloudwatchlogs (
         order   => '00',
       }
 
+      if $region {
+        file_line { 'region':
+          path => '/etc/awslogs/awscli.conf',
+          line => "region = ${region}",
+          match => '^region\s*='
+        }
+      }
+
       service { 'awslogs':
         ensure     => 'running',
         enable     => true,
