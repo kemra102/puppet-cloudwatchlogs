@@ -28,17 +28,19 @@
 class cloudwatchlogs (
   $state_file = $::cloudwatchlogs::params::state_file,
   $region     = $::cloudwatchlogs::params::region,
+  $logs       = {}
 ) inherits cloudwatchlogs::params {
 
-  $logs       = hiera_hash('cloudwatchlogs::logs',{}),
+  validate_hash($logs)
+  $logs_real       = merge(hiera_hash('cloudwatchlogs::logs',{}),$logs)
 
   validate_absolute_path($state_file)
   if $region {
     validate_string($region)
   }
 
-  validate_hash($logs)
-  create_resources('cloudwatchlogs::log', $logs)
+  validate_hash($logs_real)
+  create_resources('cloudwatchlogs::log', $logs_real)
 
   case $::operatingsystem {
     'Amazon': {
