@@ -31,13 +31,16 @@ class cloudwatchlogs (
   $logs       = {}
 ) inherits cloudwatchlogs::params {
 
+  validate_hash($logs)
+  $logs_real       = merge(hiera_hash('cloudwatchlogs::logs',{}),$logs)
+
   validate_absolute_path($state_file)
   if $region {
     validate_string($region)
   }
 
-  validate_hash($logs)
-  create_resources('cloudwatchlogs::log', $logs)
+  validate_hash($logs_real)
+  create_resources('cloudwatchlogs::log', $logs_real)
 
   case $::operatingsystem {
     'Amazon': {
@@ -58,6 +61,16 @@ class cloudwatchlogs (
         target  => '/etc/awslogs/awslogs.conf',
         content => template('cloudwatchlogs/awslogs_header.erb'),
         order   => '00',
+      }
+
+      if $region {
+        file_line { 'region-on-awslogs':
+          path    => '/etc/awslogs/awscli.conf',
+          line    => "region = ${region}",
+          match   => '^region\s*=',
+          notify  => Service['awslogs'],
+          require => Package['awslogs'],
+        }
       }
 
       service { 'awslogs':
