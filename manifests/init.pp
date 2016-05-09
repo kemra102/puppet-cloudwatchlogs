@@ -167,7 +167,7 @@ class cloudwatchlogs (
         ensure  => 'present',
         owner   => 'root',
         group   => 'root',
-        module  => '0644',
+        mode    => '0644',
         content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
     }
   }
