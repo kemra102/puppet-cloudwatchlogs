@@ -169,6 +169,8 @@ class cloudwatchlogs (
         group   => 'root',
         mode    => '0644',
         content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
+        notify  => Service['awslogs'],
+        require => Package['awslogs'],
     }
   }
 }
