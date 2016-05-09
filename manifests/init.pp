@@ -26,17 +26,24 @@
 # Copyright 2015 Danny Roberts & Russ McKendrick
 #
 class cloudwatchlogs (
-  $state_file = $::cloudwatchlogs::params::state_file,
-  $region     = $::cloudwatchlogs::params::region,
-  $logs       = {}
+  $state_file           = $::cloudwatchlogs::params::state_file,
+  $logging_config_file  = $::cloudwatchlogs::params::logging_config_file,
+  $region               = $::cloudwatchlogs::params::region,
+  $log_level            = $::cloudwatchlogs::params::log_level,
+  $logs                 = {}
 ) inherits cloudwatchlogs::params {
 
   validate_hash($logs)
   $logs_real       = merge(hiera_hash('cloudwatchlogs::logs',{}),$logs)
 
   validate_absolute_path($state_file)
+  validate_absolute_path($logging_config_file)
   if $region {
     validate_string($region)
+  }
+
+  if $log_level {
+    validate_string($log_level)
   }
 
   validate_hash($logs_real)
@@ -153,6 +160,16 @@ class cloudwatchlogs (
       }
     }
     default: { fail("The ${module_name} module is not supported on ${::osfamily}/${::operatingsystem}.") }
+  }
+
+  if $log_level {
+    file { "${logging_config_file}":
+        ensure         => 'present',
+        owner          => 'root',
+        group          => 'root',
+        mode           => '0644',
+        content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
+    }
   }
 
 }
