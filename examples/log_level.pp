@@ -4,7 +4,7 @@
 
 class { '::cloudwatchlogs': 
 	region => 'eu-west-1',
-	log_level => 'INFO' 
+	log_level => 'INFO',
 }
 
 cloudwatchlogs::log { 'Messages':
