@@ -1,0 +1,39 @@
+[loggers]
+keys=root,cwlogs,reader,publisher
+            
+[handlers]
+keys=consoleHandler
+            
+[formatters]
+keys=simpleFormatter
+           
+[logger_root]
+level=<%= @log_level %>
+handlers=consoleHandler
+            
+[logger_cwlogs]
+level=<%= @log_level %>
+handlers=consoleHandler
+qualname=cwlogs.push
+propagate=0
+            
+[logger_reader]
+level=<%= @log_level %>
+handlers=consoleHandler
+qualname=cwlogs.push.reader
+propagate=0
+            
+[logger_publisher]
+level=<%= @log_level %>
+handlers=consoleHandler
+qualname=cwlogs.push.publisher
+propagate=0
+            
+[handler_consoleHandler]
+class=logging.StreamHandler
+level=<%= @log_level %>
+formatter=simpleFormatter
+args=(sys.stderr,)
+            
+[formatter_simpleFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(process)d - %(threadName)s - %(message)s
