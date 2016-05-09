@@ -163,11 +163,11 @@ class cloudwatchlogs (
   }
 
   if $log_level {
-    file { "${logging_config_file}":
-        ensure         => 'present',
-        owner          => 'root',
-        group          => 'root',
-        mode           => '0644',
+    file { '/etc/awslogs/awslogs_dot_log.conf' :
+        ensure => 'present',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
         content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
     }
   }
