@@ -102,7 +102,17 @@ Defaults:
 
 State file for the awslogs agent.
 
+#### `logging_config_file`:
+
+Defaults: `/etc/awslogs/awslogs_dot_log.conf`
+
+Config file for the awslogs agent logging system (http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AgentReference.html).
+
 #### `region`:
+
+Default: `undef`
+
+#### `log_level`:
 
 Default: `undef`
 
