@@ -3,7 +3,7 @@
 #WARNING
 
 class { '::cloudwatchlogs': 
-	region => 'eu-west-1'
+	region => 'eu-west-1',
 	log_level => 'INFO' 
 }
 
