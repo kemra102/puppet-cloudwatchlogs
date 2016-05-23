@@ -115,6 +115,12 @@ class cloudwatchlogs (
         mode           => '0644',
         ensure_newline => true,
         warn           => true,
+      } ->
+      file { '/etc/awslogs/config':
+        ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
       }
 
       concat::fragment { 'awslogs-header':
@@ -132,6 +138,10 @@ class cloudwatchlogs (
       file { '/var/awslogs/etc/awslogs.conf':
         ensure => 'link',
         target => '/etc/awslogs/awslogs.conf',
+      } ->
+      file { '/var/awslogs/etc/config':
+        ensure => 'link',
+        target => '/etc/awslogs/config',
       }
 
       if ($region == undef) {
