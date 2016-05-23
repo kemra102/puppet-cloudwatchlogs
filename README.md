@@ -71,6 +71,20 @@ cloudwatchlogs::log { 'Secure':
 }
 ```
 
+Another example that might be used on the RedHat *::osfamily* to create individual log config files in /etc/awslogs/config/ is:
+
+```puppet
+class { '::cloudwatchlogs': region => 'eu-west-1' }
+
+cloudwatchlogs::compartment_log { 'Access':
+  path => '/var/log/httpd/access_logs',
+}
+cloudwatchlogs::compartment_log { 'Error':
+  path => '/var/log/httpd/error_logs',
+}
+```
+
+
 Alternatively logs can be defined as part of the main `cloudwatchlogs` class:
 
 ```puppet
