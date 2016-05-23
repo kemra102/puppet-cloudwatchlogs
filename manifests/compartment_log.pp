@@ -23,7 +23,7 @@ define cloudwatchlogs::compartment_log (
   validate_string($real_log_group_name)
   validate_string($multi_line_start_pattern)
 
-  concat { '/etc/awslogs/config/${name}.conf':
+  concat { "/etc/awslogs/config/${name}.conf":
     ensure         => 'present',
     owner          => 'root',
     group          => 'root',
@@ -31,7 +31,7 @@ define cloudwatchlogs::compartment_log (
     ensure_newline => true,
     warn           => true,
     require        => Package['awslogs'],
-  } ->
+  }
   concat::fragment { "cloudwatchlogs_fragment_${name}":
     target  => "/etc/awslogs/config/${name}.conf",
     content => template('cloudwatchlogs/awslogs_log.erb'),
