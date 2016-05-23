@@ -31,10 +31,10 @@ define cloudwatchlogs::compartment_log (
     ensure_newline => true,
     warn           => true,
     require        => Package['awslogs'],
+    notify         => Service['awslogs'],
   }
   concat::fragment { "cloudwatchlogs_fragment_${name}":
     target  => "/etc/awslogs/config/${name}.conf",
     content => template('cloudwatchlogs/awslogs_log.erb'),
   }
-
 }
