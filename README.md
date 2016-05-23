@@ -84,7 +84,6 @@ cloudwatchlogs::compartment_log { 'Error':
 }
 ```
 
-
 Alternatively logs can be defined as part of the main `cloudwatchlogs` class:
 
 ```puppet
