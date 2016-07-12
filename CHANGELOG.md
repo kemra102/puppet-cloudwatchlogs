@@ -1,3 +1,17 @@
+## 2016-07-12 - Release 2.3.0
+### Summary
+Large feature and bug fix release.
+
+### Bugfixes
+- Ensure config is concated before installation.
+- Various linting & test fixes.
+
+### Features
+- Support for setting `cloudwatchlogs::logs` via a Hiera hash.
+- Support setting the `region` in the main `awscli` config file.
+- Support for setting the `log_level` for logs.
+- Add support for `cloudwatchlogs::compartment_log`.
+
 ## 2016-03-22 - Release 2.2.0
 ### Summary
 Support additional CloudWatch Logs functionality & small bigfixes.
