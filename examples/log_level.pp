@@ -2,9 +2,9 @@
 #INFO
 #WARNING
 
-class { '::cloudwatchlogs': 
-	region => 'eu-west-1',
-	log_level => 'INFO',
+class { '::cloudwatchlogs':
+  region    => 'eu-west-1',
+  log_level => 'INFO',
 }
 
 cloudwatchlogs::log { 'Messages':
