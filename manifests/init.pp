@@ -46,6 +46,11 @@ class cloudwatchlogs (
     validate_string($log_level)
   }
 
+  $installed_marker = $::operatingsystem ? {
+    'Amazon' => Package['awslogs'],
+    default  => Exec['cloudwatchlogs-install'],
+  }
+
   validate_hash($logs_real)
   create_resources('cloudwatchlogs::log', $logs_real)
 
@@ -184,7 +189,7 @@ class cloudwatchlogs (
         mode    => '0644',
         content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
         notify  => Service['awslogs'],
-        require => Package['awslogs'],
+        require => $installed_marker,
     }
   }
 }
