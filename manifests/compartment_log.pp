@@ -23,6 +23,11 @@ define cloudwatchlogs::compartment_log (
   validate_string($real_log_group_name)
   validate_string($multi_line_start_pattern)
 
+  $installed_marker = $::operatingsystem ? {
+    'Amazon' => Package['awslogs'],
+    default  => Exec['cloudwatchlogs-install'],
+  }
+
   concat { "/etc/awslogs/config/${name}.conf":
     ensure         => 'present',
     owner          => 'root',
@@ -30,7 +35,7 @@ define cloudwatchlogs::compartment_log (
     mode           => '0644',
     ensure_newline => true,
     warn           => true,
-    require        => Package['awslogs'],
+    require        => $installed_marker,
     notify         => Service['awslogs'],
   }
   concat::fragment { "cloudwatchlogs_fragment_${name}":
