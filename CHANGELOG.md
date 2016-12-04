@@ -1,12 +1,20 @@
+## 2016-12-04 - Release 3.2.1
+### Summary
+Small bugfix release.
+
+#### Bugfixes
+- Force creation of symlink at `/var/awslogs/etc/conf` to prevent issues during upgrades.
+- Add appropriate `requires` based on OS for the main config.
+
 ## 2016-07-12 - Release 2.3.0
 ### Summary
 Large feature and bug fix release.
 
-### Bugfixes
+#### Bugfixes
 - Ensure config is concated before installation.
 - Various linting & test fixes.
 
-### Features
+#### Features
 - Support for setting `cloudwatchlogs::logs` via a Hiera hash.
 - Support setting the `region` in the main `awscli` config file.
 - Support for setting the `log_level` for logs.
