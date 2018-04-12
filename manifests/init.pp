@@ -80,12 +80,12 @@ class cloudwatchlogs (
           path    => '/etc/awslogs/awscli.conf',
           line    => "region = ${region}",
           match   => '^region\s*=',
-          notify  => Service['awslogs'],
+          notify  => Service[$service_name],
           require => Package['awslogs'],
         }
       }
 
-      service { 'awslogs':
+      service { $service_name:
         ensure     => 'running',
         enable     => true,
         hasrestart => true,
@@ -163,13 +163,13 @@ class cloudwatchlogs (
             Exec['cloudwatchlogs-wget']
           ],
           before  => [
-            Service['awslogs'],
+            Service[$service_name],
             File['/var/awslogs/etc/awslogs.conf'],
           ]
         }
       }
 
-      service { 'awslogs':
+      service { $service_name:
         ensure     => 'running',
         enable     => true,
         hasrestart => true,
@@ -188,7 +188,7 @@ class cloudwatchlogs (
         group   => 'root',
         mode    => '0644',
         content => template('cloudwatchlogs/awslogs_logging_config_file.erb'),
-        notify  => Service['awslogs'],
+        notify  => Service[$service_name],
         require => $installed_marker,
     }
   }
