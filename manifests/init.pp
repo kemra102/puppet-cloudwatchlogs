@@ -87,6 +87,7 @@ class cloudwatchlogs (
 
       service { $service_name:
         ensure     => 'running',
+        provider   => systemd,
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
