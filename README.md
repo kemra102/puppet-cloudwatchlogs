@@ -165,6 +165,12 @@ Default: `undef`
 
 Optional. This is a regex string that identifies the start of a log line. See [the official docs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AgentReference.html) for further info.
 
+#### `file_fingerprint_lines`
+
+Default: `1`
+
+Optional. Specifies the range of lines for identifying a file. The valid values are one number or two dash delimited numbers, such as '1', '2-5'. The default value is '1' so the first line is used to calculate fingerprint.  Fingerprint lines are not sent to CloudWatch Logs unless all the specified lines are available. 
+
 ## Http Proxy Usage
 
 If you have a http_proxy or https_proxy then run the following puppet code after calling cloudwatchlogs to modify the launcher script as a workaround bcause awslogs python code currently doesn't have http_proxy support:
