@@ -4,7 +4,7 @@ define cloudwatchlogs::log (
   $datetime_format          = '%b %d %H:%M:%S',
   $log_group_name           = undef,
   $multi_line_start_pattern = undef,
-  $file_fingerprint_lines   = '1',
+  $file_fingerprint_lines   = undef,
 
 ){
   if $path == undef {
