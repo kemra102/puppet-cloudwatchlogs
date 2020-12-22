@@ -4,8 +4,9 @@ define cloudwatchlogs::compartment_log (
   $datetime_format = '%b %d %H:%M:%S',
   $log_group_name  = undef,
   $multi_line_start_pattern = undef,
-
+  $service_name    = $::cloudwatchlogs::params::service_name,
 ){
+
   if $path == undef {
     $log_path = $name
   } else {
@@ -36,7 +37,7 @@ define cloudwatchlogs::compartment_log (
     ensure_newline => true,
     warn           => true,
     require        => $installed_marker,
-    notify         => Service['awslogs'],
+    notify         => Service[$service_name],
   }
   concat::fragment { "cloudwatchlogs_fragment_${name}":
     target  => "/etc/awslogs/config/${name}.conf",
