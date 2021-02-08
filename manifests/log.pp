@@ -2,6 +2,7 @@ define cloudwatchlogs::log (
   $path            = undef,
   $streamname      = '{instance_id}',
   $datetime_format = '%b %d %H:%M:%S',
+  $time_zone       = 'LOCAL',
   $log_group_name  = undef,
   $multi_line_start_pattern = undef,
 
@@ -20,6 +21,7 @@ define cloudwatchlogs::log (
   validate_absolute_path($log_path)
   validate_string($streamname)
   validate_string($datetime_format)
+  validate_string($time_zone)
   validate_string($real_log_group_name)
   validate_string($multi_line_start_pattern)
 
